@@ -1,5 +1,6 @@
 package com.smart.basket.dto
 
+import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
@@ -13,7 +14,7 @@ data class ProductDto(val id: Long, val name: String, val categoryName: String?,
 
 data class CartCompareRequest(
     @field:NotNull val cityId: Long,
-    @field:NotEmpty val items: List<CartItemDto>,
+    @field:NotEmpty @field:Valid val items: List<CartItemDto>,
     @field:NotBlank val strategy: String
 )
 
