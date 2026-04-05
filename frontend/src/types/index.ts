@@ -53,3 +53,50 @@ export interface ProductCompare {
   price: number
   priceDate: string
 }
+
+export interface ProductPackage {
+  id: number
+  name: string
+  description: string
+  icon: string
+  type: string
+  items: PackageItem[]
+}
+
+export interface PackageItem {
+  productId: number
+  productName: string
+  quantity: number
+  unit: string
+}
+
+export interface PackageCostResult {
+  packageId: number
+  packageName: string
+  packageIcon: string
+  totalOptimalPrice: number
+  totalSingleStorePrice: number
+  storesNeeded: number
+  itemAllocations: ItemAllocation[]
+}
+
+export interface StorePromotion {
+  id: number
+  storeId: number
+  storeName: string
+  categoryId?: number
+  categoryName?: string
+  title: string
+  description?: string
+  discountPercent?: number
+  dayOfWeek?: string
+  timeFrom?: string
+  timeTo?: string
+  validFrom: string
+  validTo: string
+}
+
+export interface CategoryProducts {
+  category: Category
+  products: Product[]
+}

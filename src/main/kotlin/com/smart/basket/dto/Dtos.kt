@@ -66,3 +66,57 @@ data class PriceHistoryResponse(
     val date: String,
     val price: BigDecimal
 )
+
+// Package DTOs
+data class PackageDto(
+    val id: Long,
+    val name: String,
+    val description: String,
+    val icon: String,
+    val type: String,
+    val items: List<PackageItemDto>
+)
+
+data class PackageItemDto(
+    val productId: Long,
+    val productName: String,
+    val quantity: Int,
+    val unit: String
+)
+
+data class PackageCostResult(
+    val packageId: Long,
+    val packageName: String,
+    val packageIcon: String,
+    val totalOptimalPrice: BigDecimal,
+    val totalSingleStorePrice: BigDecimal,
+    val storesNeeded: Int,
+    val itemAllocations: List<ItemAllocation>
+)
+
+data class PackageCostRequest(
+    @field:NotEmpty val packageIds: List<Long>
+)
+
+// Promotion DTOs
+data class PromotionDto(
+    val id: Long,
+    val storeId: Long,
+    val storeName: String,
+    val categoryId: Long?,
+    val categoryName: String?,
+    val title: String,
+    val description: String?,
+    val discountPercent: Int?,
+    val dayOfWeek: String?,
+    val timeFrom: String?,
+    val timeTo: String?,
+    val validFrom: String,
+    val validTo: String
+)
+
+// Grouped products
+data class CategoryProductsDto(
+    val category: CategoryDto,
+    val products: List<ProductDto>
+)

@@ -8,6 +8,8 @@ import CartPage from './pages/CartPage'
 import ComparePage from './pages/ComparePage'
 import HistoryPage from './pages/HistoryPage'
 import StoresPage from './pages/StoresPage'
+import PackagesPage from './pages/PackagesPage'
+import PromotionsPage from './pages/PromotionsPage'
 
 interface AppContextType {
   cities: City[]
@@ -85,6 +87,8 @@ export default function App() {
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/stores" element={<StoresPage />} />
+          <Route path="/packages" element={<PackagesPage />} />
+          <Route path="/promotions" element={<PromotionsPage />} />
         </Route>
       </Routes>
     </AppContext.Provider>

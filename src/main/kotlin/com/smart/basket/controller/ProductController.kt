@@ -11,4 +11,7 @@ class ProductController(private val productService: ProductService) {
         @RequestParam(required = false) search: String?,
         @RequestParam(required = false) categoryId: Long?
     ) = productService.findAll(search, categoryId)
+
+    @GetMapping("/grouped")
+    fun getGrouped() = productService.findAllGroupedByCategory()
 }

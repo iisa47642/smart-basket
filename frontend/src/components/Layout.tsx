@@ -5,6 +5,8 @@ import CitySelector from './CitySelector'
 const navLinks = [
   { to: '/', label: 'Каталог' },
   { to: '/cart', label: 'Корзина' },
+  { to: '/packages', label: 'Наборы' },
+  { to: '/promotions', label: 'Акции' },
   { to: '/compare', label: 'Сравнение' },
   { to: '/history', label: 'История цен' },
   { to: '/stores', label: 'Магазины' },
