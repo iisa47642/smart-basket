@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import type { City, CartItem } from './types'
 import { citiesApi } from './api/client'
 import Layout from './components/Layout'
+import AdminPage from './pages/AdminPage'
 import HomePage from './pages/HomePage'
 import CartPage from './pages/CartPage'
 import ComparePage from './pages/ComparePage'
@@ -82,6 +83,7 @@ export default function App() {
     >
       <Routes>
         <Route element={<Layout />}>
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/compare" element={<ComparePage />} />

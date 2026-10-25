@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+:focus-visible { outline: 3px solid #b45309; outline-offset: 3px; }
+.skip-link { position: absolute; left: 1rem; top: -5rem; z-index: 50; background: white; padding: 0.8rem; color: #16372a; }
+.skip-link:focus { top: 1rem; }
+.admin-field { display: block; width: 100%; border: 1px solid #94a3b8; border-radius: .5rem; background: white; padding: .65rem; margin-top: .35rem; }

@@ -1,0 +1,8 @@
+[Unit]
+Description=Check Smart Basket certificate twice per day
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+RandomizedDelaySec=3600
+Persistent=true
+[Install]
+WantedBy=timers.target

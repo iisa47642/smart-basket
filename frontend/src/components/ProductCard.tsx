@@ -37,10 +37,12 @@ export default function ProductCard({ product }: Props) {
         {showQty ? (
           <div className="flex items-center gap-2">
             <input
+              aria-label={`Количество товара ${product.name}`}
               type="number"
+              step={1}
               min={1}
               value={qty}
-              onChange={e => setQty(Math.max(1, Number(e.target.value)))}
+              onChange={e => setQty(Math.max(1, Math.floor(Number(e.target.value))))}
               className="w-16 border border-gray-300 rounded-lg px-2 py-1 text-center text-sm"
             />
             <button
@@ -50,6 +52,7 @@ export default function ProductCard({ product }: Props) {
               Добавить
             </button>
             <button
+              aria-label="Отменить добавление"
               onClick={() => setShowQty(false)}
               className="text-gray-400 hover:text-gray-600 text-sm"
             >

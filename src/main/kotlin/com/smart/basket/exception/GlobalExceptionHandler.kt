@@ -5,9 +5,24 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.bind.MissingServletRequestParameterException
+import org.slf4j.LoggerFactory
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
+    private val log = LoggerFactory.getLogger(javaClass)
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun conflict(): ResponseEntity<Map<String, String>> = ResponseEntity.status(409)
+        .body(mapOf("error" to "Запись уже существует или нарушает ограничения данных"))
+
+    @ExceptionHandler(HttpMessageNotReadableException::class, MethodArgumentTypeMismatchException::class,
+        MissingServletRequestParameterException::class, IllegalArgumentException::class)
+    fun badRequest(): ResponseEntity<Map<String, String>> = ResponseEntity.badRequest()
+        .body(mapOf("error" to "Проверьте параметры и формат запроса"))
 
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleNotFound(ex: ResourceNotFoundException): ResponseEntity<Map<String, String?>> =
@@ -20,6 +35,9 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleGeneral(ex: Exception): ResponseEntity<Map<String, String?>> =
-        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mapOf("error" to ex.message))
+    fun handleGeneral(ex: Exception): ResponseEntity<Map<String, String>> {
+        log.error("Request failed", ex)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(mapOf("error" to "Внутренняя ошибка сервера"))
+    }
 }

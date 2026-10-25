@@ -1,0 +1,9 @@
+[Unit]
+Description=Renew Smart Basket IP certificate
+After=docker.service network-online.target
+Requires=docker.service
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/smart-basket
+ExecStart=/usr/bin/docker run --rm -v /etc/letsencrypt:/etc/letsencrypt -v /var/lib/letsencrypt:/var/lib/letsencrypt -v /var/www/certbot:/var/www/certbot certbot/certbot:v5.4.0 renew --quiet --webroot -w /var/www/certbot
+ExecStartPost=/usr/bin/docker compose -f docker-compose.yml -f docker-compose.https.yml exec -T frontend nginx -s reload

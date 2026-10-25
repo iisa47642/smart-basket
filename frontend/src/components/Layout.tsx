@@ -10,6 +10,7 @@ const navLinks = [
   { to: '/compare', label: 'Сравнение' },
   { to: '/history', label: 'История цен' },
   { to: '/stores', label: 'Магазины' },
+  { to: '/admin', label: 'Управление' },
 ]
 
 export default function Layout() {
@@ -19,13 +20,14 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      <nav className="bg-[#1E293B] text-white shadow-lg">
+      <a href="#main-content" className="skip-link">К содержимому</a>
+      <nav aria-label="Основная навигация" className="bg-[#1E293B] text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="text-xl font-bold tracking-tight">
               Smart Basket
             </Link>
-            <div className="hidden md:flex gap-1">
+            <div className="hidden xl:flex gap-1">
               {navLinks.map(link => (
                 <Link
                   key={link.to}
@@ -49,7 +51,7 @@ export default function Layout() {
           <CitySelector />
         </div>
         {/* Mobile nav */}
-        <div className="md:hidden flex gap-1 px-4 pb-3 overflow-x-auto">
+        <div className="xl:hidden flex gap-1 px-4 pb-3 overflow-x-auto">
           {navLinks.map(link => (
             <Link
               key={link.to}
@@ -65,7 +67,7 @@ export default function Layout() {
           ))}
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 py-6">
         <Outlet />
       </main>
     </div>

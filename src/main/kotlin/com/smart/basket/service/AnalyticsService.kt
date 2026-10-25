@@ -1,6 +1,7 @@
 package com.smart.basket.service
 
 import com.smart.basket.dto.*
+import com.smart.basket.exception.ResourceNotFoundException
 import com.smart.basket.repository.ProductPriceRepository
 import com.smart.basket.repository.ProductRepository
 import com.smart.basket.repository.StoreRepository
@@ -18,6 +19,7 @@ class AnalyticsService(
         val stores = storeRepo.findByCityId(cityId)
         val products = productRepo.findAllById(items.map { it.productId })
         val productMap = products.associateBy { it.id }
+        if (items.any { it.productId !in productMap }) throw ResourceNotFoundException("Товар не найден")
 
         val results = stores.map { store ->
             val cartItems = items.map { item ->
@@ -62,6 +64,7 @@ class AnalyticsService(
     fun compareOptimal(cityId: Long, items: List<CartItemDto>): OptimalResult {
         val products = productRepo.findAllById(items.map { it.productId })
         val productMap = products.associateBy { it.id }
+        if (items.any { it.productId !in productMap }) throw ResourceNotFoundException("Товар не найден")
 
         val allocations = items.map { item ->
             val prices = priceRepo.findLatestPricesByProductAndCity(item.productId, cityId)

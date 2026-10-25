@@ -74,14 +74,26 @@ if [[ ! -f .env ]]; then
   echo "Создан .env со случайным паролем PostgreSQL."
 fi
 
+# Provision credentials once; do not reset existing accounts on updates.
+if ! grep -q '^ADMIN_PASSWORD=' .env; then
+  umask 077
+  printf '\nADMIN_USERNAME=admin\nADMIN_PASSWORD=%s\n' "$(openssl rand -hex 24)" >> .env
+  echo "Учётные данные администратора добавлены в защищённый файл .env."
+fi
+chmod 600 .env
+
+compose=(docker compose)
+if [[ -f /etc/letsencrypt/live/smart-basket/fullchain.pem ]]; then
+  compose+=(-f docker-compose.yml -f docker-compose.https.yml)
+fi
 echo "Проверяю конфигурацию Docker Compose..."
-docker compose config --quiet
+"${compose[@]}" config --quiet
 
 echo "Собираю и запускаю Smart Basket..."
-docker compose up -d --build --remove-orphans
+"${compose[@]}" up -d --build --remove-orphans
 
 echo
-docker compose ps
+"${compose[@]}" ps
 echo
-echo "Smart Basket запущен. Откройте в браузере: http://IP_СЕРВЕРА"
+echo "Smart Basket запущен. Используйте HTTPS, если сертификат настроен."
 echo "Логи: cd '$PROJECT_DIR' && sudo docker compose logs -f"
