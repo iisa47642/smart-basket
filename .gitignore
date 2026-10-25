@@ -5867,3 +5867,11 @@ out/
 /frontend/node_modules/yallist/README.md
 /frontend/node_modules/yallist/yallist.js
 /frontend/node_modules/.package-lock.json
+
+# Local and production environment
+.env
+
+# Frontend build output and dependencies
+/frontend/dist/
+/frontend/node_modules/
+/frontend/*.tsbuildinfo
