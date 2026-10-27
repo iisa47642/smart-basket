@@ -2,6 +2,8 @@
 
 Сравнение стоимости продуктовой корзины по магазинам. React + Kotlin/Spring Boot + PostgreSQL.
 
+Опубликованная версия: https://13-143-160-190.sslip.io/. Проверка развёртывания от 27.10.2026 описана в [DEPLOY.md](DEPLOY.md).
+
 ## Запуск
 
 На Ubuntu/Debian: `sudo ./deploy.sh`. Он создаёт `.env`, собирает образы и запускает Docker Compose.
