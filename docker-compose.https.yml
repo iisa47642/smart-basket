@@ -1,0 +1,13 @@
+services:
+  backend:
+    environment:
+      SESSION_COOKIE_SECURE: 'true'
+  frontend:
+    ports:
+      - '443:443'
+    volumes:
+      - ./frontend/nginx-https.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/healthz"]

@@ -5,6 +5,29 @@ const api = axios.create({
   baseURL: '/api/v1',
 })
 
+// Obtain a fresh CSRF token before writes, also after login/logout rotate the session.
+api.interceptors.request.use(async config => {
+  if (!['get', 'head', 'options'].includes(config.method?.toLowerCase() || 'get')) {
+    const { data } = await api.get('/auth/csrf')
+    config.headers.set(data.headerName, data.token)
+  }
+  return config
+})
+
+export const authApi = {
+  me: () => api.get('/auth/me'),
+  login: (username: string, password: string) =>
+    api.post('/auth/login', new URLSearchParams({ username, password })),
+  logout: () => api.post('/auth/logout'),
+}
+export interface PriceRecord { id: number; productId: number; storeId: number; price: number; priceDate: string }
+export const adminPricesApi = {
+  list: (productId: number, storeId: number) => api.get<PriceRecord[]>('/admin/prices', { params: { productId, storeId } }),
+  save: (record: Omit<PriceRecord, 'id'>, id?: number) => id
+    ? api.put(`/admin/prices/${id}`, record) : api.post('/admin/prices', record),
+  remove: (id: number) => api.delete(`/admin/prices/${id}`),
+}
+
 export const citiesApi = {
   getAll: () => api.get('/cities'),
 }

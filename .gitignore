@@ -5875,3 +5875,8 @@ out/
 /frontend/dist/
 /frontend/node_modules/
 /frontend/*.tsbuildinfo
+
+# Local backups and certificates
+/backups/
+/tls/
+/credentials/

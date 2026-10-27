@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAppContext } from '../App'
 import { analyticsApi } from '../api/client'
 import type { SingleStoreResult, OptimalResult as OptimalResultType } from '../types'
@@ -13,9 +13,17 @@ export default function CartPage() {
   const [singleResults, setSingleResults] = useState<SingleStoreResult[] | null>(null)
   const [optimalResult, setOptimalResult] = useState<OptimalResultType | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const revision = useRef(0)
+  useEffect(() => {
+    revision.current += 1
+    setSingleResults(null); setOptimalResult(null); setError(''); setLoading(false)
+  }, [cartItems, selectedCity, strategy])
 
   const handleCompare = async () => {
     if (!selectedCity || cartItems.length === 0) return
+    const requestRevision = revision.current
+    setError('')
     setLoading(true)
     setSingleResults(null)
     setOptimalResult(null)
@@ -27,15 +35,16 @@ export default function CartPage() {
         strategy,
       })
 
+      if (revision.current !== requestRevision) return
       if (strategy === 'single_store') {
         setSingleResults(res.data as SingleStoreResult[])
       } else {
         setOptimalResult(res.data as OptimalResultType)
       }
     } catch (err) {
-      console.error(err)
+      if (revision.current === requestRevision) setError('Не удалось сравнить цены. Проверьте соединение и попробуйте ещё раз.')
     } finally {
-      setLoading(false)
+      if (revision.current === requestRevision) setLoading(false)
     }
   }
 
@@ -100,7 +109,8 @@ export default function CartPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2" aria-live="polite">
+          {error && <p role="alert" className="mb-4 text-red-700">{error}</p>}
           {loading && (
             <div className="flex justify-center py-16">
               <div className="w-8 h-8 border-4 border-[#3B82F6] border-t-transparent rounded-full animate-spin" />
