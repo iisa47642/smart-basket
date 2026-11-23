@@ -117,6 +117,15 @@ class BasketApplicationTests {
 
     @Test fun `openapi renders with boot four`() {
         val r = request(client(), "GET", "/api-docs")
-        assertEquals(200, r.statusCode(), r.body()); assertTrue(r.body().contains("/api/v1/admin/prices"))
+        assertEquals(200, r.statusCode(), r.body())
+        val paths = json.readTree(r.body())["paths"]
+        assertTrue(paths.has("/api/v1/admin/prices"))
+        for (path in listOf("/api/v1/prices/history", "/api/v1/analytics/products/{id}/history")) {
+            val limit = paths[path]["get"]["parameters"].first { it["name"].asText() == "limit" }
+            assertEquals("integer", limit["schema"]["type"].asText())
+            assertEquals(1, limit["schema"]["minimum"].asInt())
+            assertEquals(100, limit["schema"]["maximum"].asInt())
+            assertFalse(limit["required"].asBoolean())
+        }
     }
 }

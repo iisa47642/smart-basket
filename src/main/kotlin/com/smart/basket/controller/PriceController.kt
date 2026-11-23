@@ -14,7 +14,7 @@ class PriceController(private val priceService: PriceService) {
     fun getPriceHistory(
         @RequestParam productId: Long,
         @RequestParam storeId: Long,
-        @Parameter(description = "Число последних записей", schema = Schema(minimum = "1", maximum = "100"))
+        @Parameter(description = "Число последних записей", schema = Schema(type = "integer", format = "int32", minimum = "1", maximum = "100"))
         @RequestParam(required = false) limit: Int?
     ) = priceService.getPriceHistory(productId, storeId, limit)
 }

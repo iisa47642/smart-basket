@@ -38,7 +38,7 @@ class AnalyticsController(private val analyticsService: AnalyticsService, privat
     fun priceHistory(
         @PathVariable id: Long,
         @RequestParam storeId: Long,
-        @Parameter(description = "Число последних записей", schema = Schema(minimum = "1", maximum = "100"))
+        @Parameter(description = "Число последних записей", schema = Schema(type = "integer", format = "int32", minimum = "1", maximum = "100"))
         @RequestParam(required = false) limit: Int?
     ) = ResponseEntity.ok(priceService.getPriceHistory(id, storeId, limit))
 }
