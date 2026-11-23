@@ -5,7 +5,21 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
+data class HistoryPoint(val date: java.time.LocalDate, val price: java.math.BigDecimal)
+
 interface ProductPriceRepository : JpaRepository<ProductPrice, Long> {
+
+    @Query("""
+        SELECT new com.smart.basket.repository.HistoryPoint(p.priceDate, p.price)
+        FROM ProductPrice p
+        WHERE p.product.id = :productId AND p.store.id = :storeId
+        ORDER BY p.priceDate DESC
+    """)
+    fun latestHistory(
+        @Param("productId") productId: Long,
+        @Param("storeId") storeId: Long,
+        page: org.springframework.data.domain.Pageable
+    ): List<HistoryPoint>
 
     fun findTopByProductIdAndStoreIdOrderByPriceDateDesc(
         productId: Long, storeId: Long

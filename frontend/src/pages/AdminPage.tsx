@@ -86,11 +86,12 @@ export default function AdminPage() {
     {!user ? <p role="status">Проверяем вход…</p> : !user.username ?
       <form onSubmit={login} className="max-w-md rounded-xl border border-slate-200 bg-white p-6 space-y-5">
         <h2 className="text-xl font-semibold">Вход администратора</h2>
-        <p className="text-sm text-slate-600">Для просмотра и сравнения цен вход не требуется.</p>
+        <p className="text-sm text-slate-600">Для просмотра и сравнения цен вход не требуется. Перед вводом пароля проверьте адрес сайта и HTTPS.</p>
         <label className="block text-sm font-medium">Имя пользователя<input className="admin-field" autoComplete="username" required value={username} onChange={e => setUsername(e.target.value)} /></label>
         <label className="block text-sm font-medium">Пароль<input className="admin-field" type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} /></label>
         <button className={button} disabled={busy}>{busy ? 'Входим…' : 'Войти'}</button>
       </form> : !isAdmin ? <p>Для изменения цен нужны права администратора.</p> : <>
+      <p className="mb-4 text-sm text-slate-600">На общем компьютере после работы нажмите «Выйти».</p>
       <fieldset disabled={busy} className="grid md:grid-cols-2 gap-5 mb-6">
         <label className="text-sm font-medium">Товар<select className="admin-field" value={productId} onChange={e => setProductId(Number(e.target.value))}>{products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
         <label className="text-sm font-medium">Магазин · {selectedCity?.name}<select className="admin-field" value={storeId} onChange={e => setStoreId(Number(e.target.value))}>{stores.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}</select></label>

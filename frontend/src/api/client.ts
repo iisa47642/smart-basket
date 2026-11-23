@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { CartCompareRequest } from '../types'
+import type { CartCompareRequest, PriceHistory } from '../types'
 
 const api = axios.create({
   baseURL: '/api/v1',
@@ -67,6 +67,6 @@ export const analyticsApi = {
     api.post('/analytics/cart/compare', data),
   compareProduct: (productId: number, cityId: number) =>
     api.get(`/analytics/products/${productId}/compare`, { params: { cityId } }),
-  priceHistory: (productId: number, storeId: number) =>
-    api.get(`/analytics/products/${productId}/history`, { params: { storeId } }),
+  priceHistory: (productId: number, storeId: number, limit?: number, signal?: AbortSignal) =>
+    api.get<PriceHistory[]>(`/analytics/products/${productId}/history`, { params: { storeId, limit }, signal }),
 }

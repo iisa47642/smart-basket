@@ -98,6 +98,23 @@ class BasketApplicationTests {
         assertEquals(200, request(c, "POST", "/api/v1/analytics/cart/compare", body).statusCode())
         assertEquals(400, request(c, "POST", "/api/v1/analytics/cart/compare", body.replace("single_store", "invalid")).statusCode())
     }
+    @Test fun `both public history routes return the latest slice in chronological order`() {
+        val c = client()
+        val primary = "/api/v1/analytics/products/1/history?storeId=1"
+        val alias = "/api/v1/prices/history?productId=1&storeId=1"
+        val all = json.readTree(request(c, "GET", primary).body()).toList()
+        assertTrue(all.size > 2)
+        assertEquals(all.map { it["date"].asText() }.sorted(), all.map { it["date"].asText() })
+        for (path in listOf(primary, alias)) {
+            assertEquals(all, json.readTree(request(c, "GET", path).body()).toList())
+            assertEquals(all.takeLast(2), json.readTree(request(c, "GET", "$path&limit=2").body()).toList())
+            for (limit in listOf("0", "101", "abc")) {
+                assertEquals(400, request(c, "GET", "$path&limit=$limit").statusCode())
+            }
+        }
+        assertEquals("[]", request(c, "GET", "/api/v1/prices/history?productId=1&storeId=999999&limit=1").body())
+    }
+
     @Test fun `openapi renders with boot four`() {
         val r = request(client(), "GET", "/api-docs")
         assertEquals(200, r.statusCode(), r.body()); assertTrue(r.body().contains("/api/v1/admin/prices"))
