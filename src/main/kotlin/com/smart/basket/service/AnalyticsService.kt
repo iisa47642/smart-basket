@@ -104,10 +104,4 @@ class AnalyticsService(
             )
         }
     }
-
-    fun getPriceHistory(productId: Long, storeId: Long): List<PriceHistoryResponse> {
-        return priceRepo.findPriceHistory(productId, storeId).map {
-            PriceHistoryResponse(date = it.priceDate.toString(), price = it.price)
-        }
-    }
 }
